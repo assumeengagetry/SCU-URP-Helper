@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Build artifacts
+build/
+dist/
+*.spec
+
+# Local credentials and runtime files
+config.json
+userinfo.json
+captcha.jpg
+verify.jpg
+code.jpg
+*.log
+
+# Editor and OS files
+.idea/
+.vscode/
+.DS_Store
+
+# Local agent/tooling notes
+AGENTS.md

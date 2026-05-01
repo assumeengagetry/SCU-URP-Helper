@@ -1,11 +1,4 @@
-import json
-
-import requests.exceptions
 from PySide2.QtUiTools import QUiLoader
-from PySide2.QtWidgets import QMessageBox
-
-from modules.utils import *
-from modules.AutoCourseGrabbing import AutoCourseGrabbing
 
 class AddWin:
     def __init__(self, sself):
@@ -25,6 +18,5 @@ class AddWin:
 
     def add_course(self):
         self.course_grabbing.add_course(self)
-
 
 
