@@ -5,7 +5,7 @@ from PySide2.QtWidgets import QLineEdit
 
 from modules.ui_theme import add_card_shadow, polish_window
 from modules.utils import load_config
-from modules.userLogin import urp_setup, urp_login
+from modules.userLogin import recognize_login_captcha, urp_setup, urp_login
 from win.MenuWin import MenuWin
 
 
@@ -21,10 +21,15 @@ class LoginWin:
         self.ui.password.setPlaceholderText('请输入密码')
         self.ui.password.setEchoMode(QLineEdit.Password)
         self.ui.captcha.setPlaceholderText('验证码')
+        self.ui.refresh_captcha_btn.setText('刷新验证码')
+        self.ui.ocr_btn.setText('OCR识别')
         self.ui.btn_login.setText('登录系统')
         self.ui.captcha_pic.setScaledContents(True)
         self.menu_win = None
         self.ui.btn_login.clicked.connect(self.login)
+        self.ui.refresh_captcha_btn.clicked.connect(self.refresh_captcha)
+        self.ui.ocr_btn.clicked.connect(self.recognize_captcha)
+        self.captcha_content = None
         self.readUser()
         self.ui.username.currentIndexChanged.connect(self.update_passwd)
         self.tokenval = urp_setup(self)
@@ -34,9 +39,14 @@ class LoginWin:
 
     def readUser(self):
         config = load_config()
-        if config.get('username'):
-            self.ui.username.addItem(config.get('username'))
-            self.ui.password.setText(config.get('password', ''))
+        config_username = str(config.get('username') or '')
+        config_password = str(config.get('password') or '')
+        if config_username:
+            if self.ui.username.findText(config_username) == -1:
+                self.ui.username.addItem(config_username)
+            self.ui.username.setCurrentText(config_username)
+            self.ui.username.setEditText(config_username)
+            self.ui.password.setText(config_password)
 
         try:
             with open('userinfo.json', 'r', encoding='utf-8') as user_file:
@@ -45,8 +55,11 @@ class LoginWin:
                     username = e_user["username"]
                     if self.ui.username.findText(username) == -1:
                         self.ui.username.addItem(username)
-                if not self.ui.password.text() and user_data['userList']:
-                    self.ui.password.setText(user_data['userList'][0]['password'])
+                if not self.ui.username.currentText() and user_data['userList']:
+                    first_user = user_data['userList'][0]
+                    self.ui.username.setCurrentText(first_user.get('username', ''))
+                    self.ui.username.setEditText(first_user.get('username', ''))
+                    self.ui.password.setText(first_user.get('password', ''))
         except FileNotFoundError:
             print("找不到用户信息文件")
         except (KeyError, json.JSONDecodeError):
@@ -82,3 +95,10 @@ class LoginWin:
             self.menu_win = MenuWin()
             self.menu_win.ui.show()
             self.ui.close()
+
+    def refresh_captcha(self):
+        self.ui.captcha.clear()
+        self.tokenval = urp_setup(self)
+
+    def recognize_captcha(self):
+        recognize_login_captcha(self)

@@ -132,7 +132,7 @@
        <property name="minimumSize">
         <size>
          <width>430</width>
-         <height>330</height>
+         <height>380</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -242,6 +242,40 @@
               <width>120</width>
               <height>16777215</height>
              </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="captchaActionLayout">
+          <property name="spacing">
+           <number>12</number>
+          </property>
+          <item>
+           <spacer name="captchaActionSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="refresh_captcha_btn">
+            <property name="text">
+             <string>刷新验证码</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="ocr_btn">
+            <property name="text">
+             <string>OCR识别</string>
             </property>
            </widget>
           </item>

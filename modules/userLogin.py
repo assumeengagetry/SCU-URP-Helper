@@ -6,6 +6,7 @@ import requests
 from PySide2.QtGui import QPixmap
 from PySide2.QtWidgets import QMessageBox
 
+from modules.ocr import classify_captcha
 from modules.utils import (
     captcha_url,
     http_head,
@@ -187,6 +188,20 @@ def _remember_login(sself, username, password):
     save_config({"username": username, "password": password})
 
 
+def recognize_login_captcha(sself):
+    image_content = getattr(sself, "captcha_content", None)
+    if not image_content:
+        QMessageBox.about(sself.ui, "[提示]", "请先刷新验证码")
+        return ""
+    try:
+        code = classify_captcha(image_content)
+    except Exception as exc:
+        QMessageBox.about(sself.ui, "[错误]", "OCR识别失败：{}".format(exc))
+        return ""
+    sself.ui.captcha.setText(code)
+    return code
+
+
 def urp_setup(sself):
     try:
         response = request_get(login_url)
@@ -204,15 +219,17 @@ def urp_setup(sself):
             return ""
 
         http_captcha = request_get(captcha_url)
+        sself.captcha_content = http_captcha.content
         captcha_file = runtime_path("captcha.jpg")
         with open(captcha_file, "wb") as http_capfile:
-            http_capfile.write(http_captcha.content)
+            http_capfile.write(sself.captcha_content)
     except requests.exceptions.RequestException as exc:
         QMessageBox.about(sself.ui, "[错误]", "网络错误：{}".format(exc))
         return ""
 
     pixmap = QPixmap(captcha_file)
     sself.ui.captcha_pic.setPixmap(pixmap)
+    recognize_login_captcha(sself)
     return token_value
 
 

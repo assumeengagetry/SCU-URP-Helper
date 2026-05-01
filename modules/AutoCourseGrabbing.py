@@ -2,11 +2,11 @@ import json
 import re
 import time
 
-import ddddocr
 import requests.exceptions
 from PySide2.QtCore import QThread
 from PySide2.QtWidgets import QMessageBox, QTableWidgetItem
 
+from modules.ocr import classify_captcha
 from modules.utils import (
     course_delete_url,
     course_quit_url,
@@ -45,12 +45,6 @@ class AutoCourseGrabbing:
         self.fxid = get_major_id()
         self.numc = {}
         self.data_list = []
-        self.ocr = None
-
-    def _get_ocr(self):
-        if self.ocr is None:
-            self.ocr = ddddocr.DdddOcr(show_ad=False)
-        return self.ocr
 
     def _message(self, sself, title, content):
         QMessageBox.about(sself.ui, title, content)
@@ -178,8 +172,7 @@ class AutoCourseGrabbing:
         image = request_get(select_captcha_url).content
         with open(runtime_path("verify.jpg"), "wb") as photo:
             photo.write(image)
-        code = self._get_ocr().classification(image)
-        return code[-4:]
+        return classify_captcha(image)
 
     def _submit_course(self, course, token):
         major_id = self.fxid or get_major_id()
