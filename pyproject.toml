@@ -4,6 +4,11 @@ version = "1.1.0"
 description = "SCU URP Helper GUI with updated course-selection APIs"
 readme = "README.md"
 requires-python = ">=3.8,<3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "SCU URP Helper contributors" },
+]
+keywords = ["scu", "urp", "course-selection", "pyside2", "uv"]
 dependencies = [
     "PySide2>=5.13.2,<5.16",
     "requests>=2.31.0",

@@ -16,11 +16,12 @@ from modules.utils import (
     free_course_select_url,
     get_major_id,
     get_sleep_interval,
-    http_head,
-    http_main,
     normalize_course_list,
     post_class_data,
     query_class_data,
+    request_get,
+    request_post,
+    runtime_path,
     sanitize_text,
     selected_courses_url,
     select_captcha_url,
@@ -147,9 +148,9 @@ class AutoCourseGrabbing:
             return [], "请输入课程名称"
 
         try:
-            page = http_main.get(course_select_url, headers=http_head)
-        except requests.exceptions.ConnectionError:
-            return [], "网络错误"
+            page = request_get(course_select_url)
+        except requests.exceptions.RequestException as exc:
+            return [], "网络错误：{}".format(exc)
 
         if page.status_code != 200 or page.text.find("自由选课") == -1:
             return [], "当前非选课阶段，或者教务处网站挂了，或者你的网络不行"
@@ -157,9 +158,9 @@ class AutoCourseGrabbing:
         self._extract_major_id_from_page(page.text)
 
         try:
-            response = http_main.post(free_course_select_url, data=query_data, headers=http_head)
-        except requests.exceptions.ConnectionError:
-            return [], "网络错误"
+            response = request_post(free_course_select_url, data=query_data)
+        except requests.exceptions.RequestException as exc:
+            return [], "网络错误：{}".format(exc)
 
         if response.status_code != 200 or not response.text.strip():
             return [], "获取课程列表失败，可能网络异常或登录过期"
@@ -174,8 +175,8 @@ class AutoCourseGrabbing:
         return data_list, ""
 
     def _select_captcha_code(self):
-        image = http_main.get(select_captcha_url, headers=http_head).content
-        with open("verify.jpg", "wb") as photo:
+        image = request_get(select_captcha_url).content
+        with open(runtime_path("verify.jpg"), "wb") as photo:
             photo.write(image)
         code = self._get_ocr().classification(image)
         return code[-4:]
@@ -188,7 +189,7 @@ class AutoCourseGrabbing:
         local_post["fajhh"] = major_id
         local_post["tokenValue"] = token
         local_post["inputCode"] = self._select_captcha_code()
-        return http_main.post(course_submit_url, data=local_post, headers=http_head)
+        return request_post(course_submit_url, data=local_post)
 
     def show_course_in_table(self, data_list, sself):
         if not isinstance(data_list, list):
@@ -223,9 +224,9 @@ class AutoCourseGrabbing:
 
     def selectRes(self, sself):
         try:
-            res_data = http_main.get(selected_courses_url, headers=http_head)
-        except requests.exceptions.ConnectionError:
-            self._message(sself, "[错误]", "网络错误")
+            res_data = request_get(selected_courses_url)
+        except requests.exceptions.RequestException as exc:
+            self._message(sself, "[错误]", "网络错误：{}".format(exc))
             return -2
 
         try:
@@ -335,11 +336,11 @@ class AutoCourseGrabbing:
             )
 
             try:
-                page = http_main.get(course_select_url, headers=http_head)
+                page = request_get(course_select_url)
                 self._extract_major_id_from_page(page.text)
                 token = self._extract_token(page.text)
-            except requests.exceptions.ConnectionError:
-                self._emit_message(sself, "网络错误")
+            except requests.exceptions.RequestException as exc:
+                self._emit_message(sself, "网络错误：{}".format(exc))
                 time.sleep(loop_time)
                 continue
 
@@ -366,8 +367,8 @@ class AutoCourseGrabbing:
                         current["kcId"] = visit_key
                         try:
                             submit_res = self._submit_course(current, token)
-                        except requests.exceptions.ConnectionError:
-                            self._emit_message(sself, "网络错误")
+                        except requests.exceptions.RequestException as exc:
+                            self._emit_message(sself, "网络错误：{}".format(exc))
                             break
 
                         if submit_res.text.find("ok") != -1:
@@ -399,9 +400,9 @@ class AutoCourseGrabbing:
 
         for row in selected_rows:
             try:
-                page = http_main.get(course_quit_url, headers=http_head)
-            except requests.exceptions.ConnectionError:
-                self._message(sself, "[错误]", "网络错误")
+                page = request_get(course_quit_url)
+            except requests.exceptions.RequestException as exc:
+                self._message(sself, "[错误]", "网络错误：{}".format(exc))
                 continue
 
             token = self._extract_token(page.text)
@@ -419,7 +420,7 @@ class AutoCourseGrabbing:
                 "kxh": course[1],
                 "tokenValue": token,
             }
-            post_res = http_main.post(course_delete_url, data=data, headers=http_head)
+            post_res = request_post(course_delete_url, data=data)
             if post_res.text.find("删除课程成功") != -1:
                 name = name_item.text() if name_item is not None else course_item.text()
                 self._message(sself, "[成功]", name + "删除成功")

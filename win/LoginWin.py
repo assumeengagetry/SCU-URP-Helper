@@ -12,6 +12,7 @@ class LoginWin:
     def __init__(self):
         super().__init__()
         self.ui = QUiLoader().load('./ui/login.ui')
+        self.menu_win = None
         self.ui.btn_login.clicked.connect(self.login)
         self.readUser()
         self.ui.username.currentIndexChanged.connect(self.update_passwd)
@@ -58,7 +59,6 @@ class LoginWin:
             print("用户信息文件格式错误")
 
     def login(self):
-        global menu_win
         if not self.tokenval:
             self.tokenval = urp_setup(self)
             if not self.tokenval:
@@ -68,6 +68,6 @@ class LoginWin:
             self.tokenval = urp_setup(self)
             self.ui.captcha.clear()
         else:
-            menu_win = MenuWin()
-            menu_win.ui.show()
+            self.menu_win = MenuWin()
+            self.menu_win.ui.show()
             self.ui.close()

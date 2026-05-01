@@ -44,6 +44,9 @@ class StartWin:
         self.course_grabbing.show_course_in_table(data_list, self)
 
     def start(self):
+        if self.th_start is not None and self.th_start.isRunning():
+            QMessageBox.about(self.ui, '[提示]', '抢课已经在运行中')
+            return
         self.th_start = Thread_start(self)
         self.th_start.start()
         # self.course_grabbing.start(self)

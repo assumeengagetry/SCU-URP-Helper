@@ -9,8 +9,10 @@ from PySide2.QtWidgets import QMessageBox
 from modules.utils import (
     captcha_url,
     http_head,
-    http_main,
     login_url,
+    request_get,
+    request_post,
+    runtime_path,
     save_config,
     security_check_url,
 )
@@ -187,7 +189,7 @@ def _remember_login(sself, username, password):
 
 def urp_setup(sself):
     try:
-        response = http_main.get(login_url, headers=http_head)
+        response = request_get(login_url)
         if response.status_code != 200:
             QMessageBox.about(sself.ui, "[错误]", "登录页打开失败，状态码：{}".format(response.status_code))
             return ""
@@ -201,14 +203,15 @@ def urp_setup(sself):
             QMessageBox.about(sself.ui, "[错误]", "随机token获取错误，教务系统登录页可能已变化")
             return ""
 
-        http_captcha = http_main.get(captcha_url, headers=http_head)
-        with open("captcha.jpg", "wb") as http_capfile:
+        http_captcha = request_get(captcha_url)
+        captcha_file = runtime_path("captcha.jpg")
+        with open(captcha_file, "wb") as http_capfile:
             http_capfile.write(http_captcha.content)
-    except requests.exceptions.ConnectionError:
-        QMessageBox.about(sself.ui, "[错误]", "网络错误")
+    except requests.exceptions.RequestException as exc:
+        QMessageBox.about(sself.ui, "[错误]", "网络错误：{}".format(exc))
         return ""
 
-    pixmap = QPixmap("captcha.jpg")
+    pixmap = QPixmap(captcha_file)
     sself.ui.captcha_pic.setPixmap(pixmap)
     return token_value
 
@@ -240,9 +243,9 @@ def urp_login(sself):
         login_headers["Origin"] = "http://zhjw.scu.edu.cn"
 
         try:
-            http_post = http_main.post(action_url, data=post_data, headers=login_headers)
-        except requests.exceptions.ConnectionError:
-            QMessageBox.about(sself.ui, "[错误]", "网络错误")
+            http_post = request_post(action_url, data=post_data, headers=login_headers)
+        except requests.exceptions.RequestException as exc:
+            QMessageBox.about(sself.ui, "[错误]", "网络错误：{}".format(exc))
             return -1
 
         if _is_login_success(http_post.text, http_post.url):

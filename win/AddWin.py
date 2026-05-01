@@ -1,5 +1,6 @@
 from PySide2.QtUiTools import QUiLoader
 
+
 class AddWin:
     def __init__(self, sself):
         super().__init__()
@@ -18,5 +19,4 @@ class AddWin:
 
     def add_course(self):
         self.course_grabbing.add_course(self)
-
 

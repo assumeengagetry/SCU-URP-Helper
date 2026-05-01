@@ -14,6 +14,9 @@ class MenuWin:
         self.ui.query_btn.clicked.connect(self.go_selected)
         self.ui.start_btn.clicked.connect(self.go_start)
         self.course_grabbing = AutoCourseGrabbing()
+        self.add_win = None
+        self.selected_win = None
+        self.start_win = None
 
 
     def go_selected(self):
@@ -21,9 +24,8 @@ class MenuWin:
         已选课程
         :return:
         """
-        global se_win
-        se_win = SelectedWin(self)
-        se_win.ui.show()
+        self.selected_win = SelectedWin(self)
+        self.selected_win.ui.show()
 
 
     def go_add(self):
@@ -31,15 +33,13 @@ class MenuWin:
         添加课程
         :return:
         """
-        global add_win
-        add_win = AddWin(self)
-        add_win.ui.show()
+        self.add_win = AddWin(self)
+        self.add_win.ui.show()
 
     def go_start(self):
         """
         开始抢课
         :return:
         """
-        global start_win
-        start_win = StartWin(self)
-        start_win.ui.show()
+        self.start_win = StartWin(self)
+        self.start_win.ui.show()

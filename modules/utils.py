@@ -7,6 +7,7 @@ import requests
 
 
 http_main = requests.session()
+REQUEST_TIMEOUT = 15
 
 login_url = "http://zhjw.scu.edu.cn/login"
 security_check_url = "http://zhjw.scu.edu.cn/j_spring_security_check"
@@ -79,7 +80,27 @@ def print_log(message, level="INFO"):
 
 
 def config_path():
-    return os.path.join(os.getcwd(), "config.json")
+    return os.path.join(app_dir(), "config.json")
+
+
+def app_dir():
+    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def runtime_path(filename):
+    return os.path.join(app_dir(), filename)
+
+
+def request_get(url, **kwargs):
+    kwargs.setdefault("headers", http_head)
+    kwargs.setdefault("timeout", REQUEST_TIMEOUT)
+    return http_main.get(url, **kwargs)
+
+
+def request_post(url, **kwargs):
+    kwargs.setdefault("headers", http_head)
+    kwargs.setdefault("timeout", REQUEST_TIMEOUT)
+    return http_main.post(url, **kwargs)
 
 
 def load_config():

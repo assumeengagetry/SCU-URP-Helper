@@ -1,7 +1,6 @@
 from PySide2.QtUiTools import QUiLoader
 
 
-
 class SelectedWin:
     def __init__(self, sself):
         super().__init__()
@@ -14,4 +13,3 @@ class SelectedWin:
 
     def delete(self):
         self.course_grabbing.delete(self)
-
