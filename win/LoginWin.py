@@ -1,7 +1,9 @@
 import json
 
 from PySide2.QtUiTools import QUiLoader
+from PySide2.QtWidgets import QLineEdit
 
+from modules.ui_theme import add_card_shadow, polish_window
 from modules.utils import load_config
 from modules.userLogin import urp_setup, urp_login
 from win.MenuWin import MenuWin
@@ -12,6 +14,15 @@ class LoginWin:
     def __init__(self):
         super().__init__()
         self.ui = QUiLoader().load('./ui/login.ui')
+        polish_window(self.ui, 'SCU URP Helper - 登录')
+        add_card_shadow(self.ui.loginCard)
+        self.ui.label_4.setText('新版接口')
+        self.ui.username.setPlaceholderText('请输入学号')
+        self.ui.password.setPlaceholderText('请输入密码')
+        self.ui.password.setEchoMode(QLineEdit.Password)
+        self.ui.captcha.setPlaceholderText('验证码')
+        self.ui.btn_login.setText('登录系统')
+        self.ui.captcha_pic.setScaledContents(True)
         self.menu_win = None
         self.ui.btn_login.clicked.connect(self.login)
         self.readUser()

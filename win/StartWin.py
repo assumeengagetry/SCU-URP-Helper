@@ -3,6 +3,7 @@ from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import QMessageBox
 
 from modules.AutoCourseGrabbing import Thread_start
+from modules.ui_theme import add_card_shadow, polish_table, polish_window
 
 
 class Communicate(QObject):
@@ -16,9 +17,13 @@ class StartWin:
         super().__init__()
         self.th_start = None
         self.ui = QUiLoader().load('./ui/start.ui')
+        polish_window(self.ui, 'SCU URP Helper - 开始抢课')
+        add_card_shadow(self.ui.toolbarCard)
         self.ui.table.setColumnCount(10)
         self.ui.table.setHorizontalHeaderLabels(
             ["课程编号", "课程名", "校区", "课余量", "位置", "教室", "周数", "星期", "时间", "教师"])
+        polish_table(self.ui.table)
+        self.ui.time.setPlaceholderText('2')
         self.ui.time.setText("2")
         self.ui.start_btn.setEnabled(True)
         self.ui.start_btn.clicked.connect(self.start)

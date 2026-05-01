@@ -6,42 +6,96 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>967</width>
-    <height>627</height>
+    <width>1040</width>
+    <height>680</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>820</width>
+    <height>540</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>SCU URP Helper</string>
   </property>
-  <widget class="QTableWidget" name="table">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>50</y>
-     <width>871</width>
-     <height>511</height>
-    </rect>
+  <layout class="QVBoxLayout" name="pageLayout">
+   <property name="leftMargin">
+    <number>28</number>
    </property>
-  </widget>
-  <widget class="QPushButton" name="delete_btn">
-   <property name="geometry">
-    <rect>
-     <x>440</x>
-     <y>10</y>
-     <width>121</width>
-     <height>31</height>
-    </rect>
+   <property name="topMargin">
+    <number>24</number>
    </property>
-   <property name="font">
-    <font>
-     <family>微软雅黑</family>
-     <pointsize>16</pointsize>
-    </font>
+   <property name="rightMargin">
+    <number>28</number>
    </property>
-   <property name="text">
-    <string>删除课程</string>
+   <property name="bottomMargin">
+    <number>28</number>
    </property>
-  </widget>
+   <property name="spacing">
+    <number>16</number>
+   </property>
+   <item>
+    <widget class="QFrame" name="toolbarCard">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <layout class="QHBoxLayout" name="toolbarLayout">
+      <property name="leftMargin">
+       <number>18</number>
+      </property>
+      <property name="topMargin">
+       <number>16</number>
+      </property>
+      <property name="rightMargin">
+       <number>18</number>
+      </property>
+      <property name="bottomMargin">
+       <number>16</number>
+      </property>
+      <property name="spacing">
+       <number>12</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="title_label">
+        <property name="text">
+         <string>已选课程</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="toolbarSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="delete_btn">
+        <property name="minimumSize">
+         <size>
+          <width>130</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>删除课程</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="table"/>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

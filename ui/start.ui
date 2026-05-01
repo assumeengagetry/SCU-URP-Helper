@@ -6,96 +6,120 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1164</width>
-    <height>643</height>
+    <width>1180</width>
+    <height>720</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Form</string>
+  <property name="minimumSize">
+   <size>
+    <width>900</width>
+    <height>560</height>
+   </size>
   </property>
-  <widget class="QTableWidget" name="table">
-   <property name="geometry">
-    <rect>
-     <x>40</x>
-     <y>110</y>
-     <width>1101</width>
-     <height>481</height>
-    </rect>
+  <property name="windowTitle">
+   <string>SCU URP Helper</string>
+  </property>
+  <layout class="QVBoxLayout" name="pageLayout">
+   <property name="leftMargin">
+    <number>28</number>
    </property>
-  </widget>
-  <widget class="QPushButton" name="start_btn">
-   <property name="geometry">
-    <rect>
-     <x>840</x>
-     <y>10</y>
-     <width>161</width>
-     <height>41</height>
-    </rect>
+   <property name="topMargin">
+    <number>24</number>
    </property>
-   <property name="font">
-    <font>
-     <family>微软雅黑</family>
-     <pointsize>16</pointsize>
-    </font>
+   <property name="rightMargin">
+    <number>28</number>
    </property>
-   <property name="text">
-    <string>开始抢课</string>
+   <property name="bottomMargin">
+    <number>28</number>
    </property>
-  </widget>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>120</x>
-     <y>10</y>
-     <width>521</width>
-     <height>41</height>
-    </rect>
+   <property name="spacing">
+    <number>16</number>
    </property>
-   <property name="font">
-    <font>
-     <family>微软雅黑</family>
-     <pointsize>16</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>输入间隔时间，单位为秒，只输入数字（建议2~3秒）：</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="time">
-   <property name="geometry">
-    <rect>
-     <x>670</x>
-     <y>10</y>
-     <width>131</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>微软雅黑</family>
-     <pointsize>16</pointsize>
-    </font>
-   </property>
-  </widget>
-  <widget class="QLabel" name="running_info">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>70</y>
-     <width>1081</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>宋体</family>
-     <pointsize>12</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>当前次数：           总共耗时：           轮询速度：  </string>
-   </property>
-  </widget>
+   <item>
+    <widget class="QFrame" name="toolbarCard">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <layout class="QVBoxLayout" name="toolbarOuterLayout">
+      <property name="leftMargin">
+       <number>18</number>
+      </property>
+      <property name="topMargin">
+       <number>16</number>
+      </property>
+      <property name="rightMargin">
+       <number>18</number>
+      </property>
+      <property name="bottomMargin">
+       <number>16</number>
+      </property>
+      <property name="spacing">
+       <number>12</number>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" name="toolbarLayout">
+        <property name="spacing">
+         <number>12</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>轮询间隔（秒）</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="time">
+          <property name="maximumSize">
+           <size>
+            <width>140</width>
+            <height>16777215</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="start_btn">
+          <property name="minimumSize">
+           <size>
+            <width>150</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>开始抢课</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="toolbarSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QLabel" name="running_info">
+        <property name="text">
+         <string>当前次数：0    总共耗时：0秒    轮询速度：-</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="table"/>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>
